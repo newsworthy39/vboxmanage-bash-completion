@@ -1,10 +1,9 @@
 # bash command-line completion for VBoxManage command
 #
 # Author: Roman 'gryf' Dobosz <gryf73@gmail.com>
-# URL: https://bitbucket.org/gryf/vboxmanage-bash-completion
 # URL: https://github.com/gryf/vboxmanage-bash-completion
 # License: 3-clause BSD-style license (see LICENSE file)
-# Version: 7.0.10
+# Version: 7.0.14
 
 
 _VBoxManage() {
@@ -164,8 +163,8 @@ _VBoxManage() {
         compopt -o filenames
 
         vms=$(VBoxManage list vms -l | \
-            egrep '^Name|State' | \
-            egrep -B1 'State:\s+saved' | \
+            grep -E '^Name|State' | \
+            grep -E -B1 'State:\s+saved' | \
             grep Name |$VBMC_SED 's/Name:\s\+//' | \
             tr '\n' '|' | \
             $VBMC_SED 's/|$//' | \
@@ -199,7 +198,7 @@ _VBoxManage() {
         local item
 
         list=$(VBoxManage list ostypes | \
-            egrep ^ID: | \
+            grep -E ^ID: | \
             $VBMC_SED 's/ID:\s\+//' | \
             tr '\n' '|' | \
             $VBMC_SED 's/|$//')
@@ -234,7 +233,7 @@ _VBoxManage() {
         local item
 
         list=$(VBoxManage list hostonlyifs | \
-            egrep ^Name: | \
+            grep -E ^Name: | \
             $VBMC_SED 's/Name:\s\+//' | \
             $VBMC_SED 's/\s/\\ /g'| \
             tr '\n' '|' | \
@@ -377,7 +376,7 @@ _VBoxManage() {
         local item
 
         list=$(VBoxManage list bridgedifs | \
-            egrep ^Name: | \
+            grep -E ^Name: | \
             $VBMC_SED 's/Name:\s\+//' | \
             $VBMC_SED 's/\s/\\ /g'| \
             tr '\n' '|' | \
@@ -395,7 +394,7 @@ _VBoxManage() {
         local item
 
         list=$(VBoxManage list intnets| \
-            egrep ^Name: | \
+            grep -E ^Name: | \
             $VBMC_SED 's/Name:\s\+//' | \
             $VBMC_SED 's/\s/\\ /g'| \
             tr '\n' '|' | \
@@ -938,7 +937,7 @@ _VBoxManage() {
                             COMPREPLY=( $(compgen -W "$result" -- ${cur}) )
                             ;;
                         changeuartmode[1-2])
-                            tmp=(disconnected server client tcpserver tcpclient 
+                            tmp=(disconnected server client tcpserver tcpclient
                                 file device-name)
                             _get_excluded_items "${tmp[@]}"
                             COMPREPLY=( $(compgen -W "$result" -- ${cur}) )
